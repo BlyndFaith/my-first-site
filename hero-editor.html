@@ -3,182 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bounty Bash | Official Data Editor</title>
+    <title>Bounty Bash | Official Formula Editor</title>
     <style>
         :root {
-            --melon-green: #2ecc71;
-            --dice-rank: #9b59b6;
-            --panel-bg: #141414;
-            --accent: #f1c40f;
+            --melon: #2ecc71;
+            --dice: #9b59b6;
+            --panel: #1a1a1a;
+            --ss-rank: #f1c40f;
         }
-
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #0a0a0a; color: #eee; margin: 0; padding-bottom: 100px; }
-        
-        nav { background: #000; border-bottom: 2px solid var(--melon-green); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-        nav a { color: white; text-decoration: none; font-weight: bold; margin-left: 20px; font-size: 0.9rem; }
-
-        .layout { display: grid; grid-template-columns: 400px 1fr; gap: 20px; max-width: 1200px; margin: 20px auto; padding: 0 20px; }
-        .card { background: var(--panel-bg); border: 1px solid #333; border-radius: 12px; padding: 20px; }
-        
-        h2 { font-size: 0.8rem; text-transform: uppercase; color: var(--melon-green); letter-spacing: 1px; margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 10px; }
-
+        body { font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: #fff; margin: 0; padding: 20px; }
+        .layout { display: grid; grid-template-columns: 400px 1fr; gap: 20px; max-width: 1200px; margin: auto; }
+        .box { background: var(--panel); border: 1px solid #333; padding: 20px; border-radius: 10px; }
+        h2 { color: var(--melon); font-size: 0.9rem; text-transform: uppercase; margin-top: 0; }
         .field { margin-bottom: 15px; }
-        label { display: block; font-size: 0.7rem; color: #777; text-transform: uppercase; margin-bottom: 4px; }
-        select, input { width: 100%; background: #222; border: 1px solid #444; color: white; padding: 10px; border-radius: 6px; box-sizing: border-box; }
-
-        /* Stat Display */
-        .hero-title { text-align: center; margin-bottom: 20px; }
-        .hero-name { font-size: 2rem; font-weight: 800; margin: 0; color: white; }
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
-        .stat-box { background: #000; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #222; }
-        .stat-val { font-size: 1.8rem; font-weight: 900; color: var(--accent); }
-        
-        .dice-badge { display: inline-block; padding: 4px 12px; border-radius: 4px; font-weight: 800; font-size: 0.8rem; margin-top: 5px; }
-        .rank-A { background: #3498db; }
-        .rank-S { background: #e67e22; }
-        .rank-SS { background: var(--accent); color: black; }
-
-        .btn-save { background: var(--melon-green); color: black; width: 100%; border: none; padding: 12px; font-weight: 800; border-radius: 6px; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
-        .info-text { font-size: 0.8rem; color: #aaa; background: #222; padding: 10px; border-radius: 6px; line-height: 1.4; border-left: 3px solid var(--accent); }
+        label { display: block; font-size: 0.7rem; color: #888; margin-bottom: 5px; }
+        input, select { width: 100%; background: #222; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 5px; }
+        .stat-val { font-size: 2.5rem; font-weight: 800; color: var(--ss-rank); text-align: center; margin: 10px 0; }
+        .cost-tag { color: var(--melon); font-weight: bold; font-size: 1.2rem; }
     </style>
 </head>
 <body>
 
-<nav>
-    <div style="font-weight: 900; color: var(--melon-green);">BOUNTY BASH THEORYCRAFT</div>
-    <div>
-        <a href="index.html">DASHBOARD</a>
-        <a href="hero-editor.html">HERO EDITOR</a>
-        <a href="test-teams.html">TEAM SIM</a>
-    </div>
-</nav>
-
 <div class="layout">
-    <div class="card">
-        <h2>Hero Data Configuration</h2>
-        
+    <div class="box">
+        <h2>Configuration</h2>
         <div class="field">
-            <label>Hero Name (From Persos.xml)</label>
-            <select id="heroSelect" onchange="updateEditor()"></select>
+            <label>Hero Base (From Persos.xml)</label>
+            <select id="heroSelect" onchange="calc()">
+                <option value="1000" data-hp="3000">Whisker (Base 1000)</option>
+                <option value="1400" data-hp="2500">DragonDA (Base 1400)</option>
+                <option value="1250" data-hp="3000">NecroDA (Base 1250)</option>
+                <option value="100" data-hp="1000">Polly (Base 100)</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Level</label>
+            <input type="number" id="lvl" value="1" min="1" oninput="calc()">
+        </div>
+        <div class="field">
+            <label>Star Level (20% Multiplier)</label>
+            <input type="number" id="stars" value="1" min="1" max="10" oninput="calc()">
+        </div>
+        <div class="field">
+            <label>Dice Rank Effect</label>
+            <select id="dice" onchange="calc()">
+                <option value="1">None</option>
+                <option value="1.25">Rank A (+25% Stats)</option>
+                <option value="1.50">Rank S (+50% Stats)</option>
+                <option value="2.00">Rank SS (+100% Stats)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="box">
+        <h2>Live Calculations</h2>
+        <div id="heroName" style="font-size: 1.5rem; font-weight: bold;">Whisker</div>
+        
+        <div style="margin-top: 20px;">
+            <label>Calculated Combat Power</label>
+            <div class="stat-val" id="power">0</div>
         </div>
 
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div class="field">
-                <label>Level</label>
-                <input type="number" id="lvl" value="1" min="1" oninput="updateEditor()">
+            <div>
+                <label>Estimated HP</label>
+                <div id="hp" style="font-weight: bold;">0</div>
             </div>
-            <div class="field">
-                <label>Star Level</label>
-                <input type="number" id="stars" value="1" min="1" max="10" oninput="updateEditor()">
-            </div>
-        </div>
-
-        <h2>🎲 Dice Roll Rank</h2>
-        <div class="field">
-            <label>Current Dice Multiplier</label>
-            <select id="diceRank" onchange="updateEditor()">
-                <option value="1">No Rank (1.0x)</option>
-                <option value="1.2">Rank A (+20% Stats)</option>
-                <option value="1.5">Rank S (+50% Stats)</option>
-                <option value="2.0">Rank SS (+100% Stats)</option>
-            </select>
-        </div>
-
-        <button class="btn-save" onclick="saveToTeam()">Save Hero to Slot</button>
-    </div>
-
-    <div class="card">
-        <div class="hero-title">
-            <div id="starVisual" style="color:var(--accent); font-size: 1.2rem;">★</div>
-            <h1 id="displayName" class="hero-name">---</h1>
-            <div id="skillText" style="font-size: 0.75rem; color: #666; margin-top: 5px;">Skills: ---</div>
-        </div>
-
-        <div class="stat-grid">
-            <div class="stat-box">
-                <label>Total Atk</label>
-                <div class="stat-val" id="atkVal">0</div>
-            </div>
-            <div class="stat-box">
-                <label>Total HP</label>
-                <div class="stat-val" id="hpVal" style="color: #e74c3c;">0</div>
+            <div>
+                <label>Melon Upgrade Cost</label>
+                <div class="cost-tag" id="cost">0 🍉</div>
             </div>
         </div>
-
-        <div class="field">
-            <label>Owned Effect (From Game Files)</label>
-            <div class="info-text" id="ownedText">No data available for this hero.</div>
-        </div>
-
-        <div style="margin-top: 20px;">
-            <label>Estimated Level Up Cost</label>
-            <div style="font-size: 1.4rem; font-weight: bold; color: var(--melon-green);">
-                <span id="melonCost">0</span> 🍉 Watermelons
-            </div>
+        
+        <div style="margin-top: 20px; font-size: 0.8rem; color: #666; border-top: 1px solid #333; padding-top: 10px;">
+            Formula: Base * (1 + (0.006 * Lvl)) * (1.2 ^ Stars) * Dice
         </div>
     </div>
 </div>
 
 <script>
-    // DATA BLOCK: Extracted directly from your Persos.xml
-    const heroDatabase = [
-        { "key": "Seabeard", "name": "Seabeard", "atk": 100, "hp": 1000, "info": "Gives more *gold*", "skills": ["ShootPistol", "Tsunami"] },
-        { "key": "Montacos", "name": "Montacos", "atk": 100, "hp": 1000, "info": "Reduces the *attack* of the enemy", "skills": ["SkSword", "Guacamole"] },
-        { "key": "Bricolo", "name": "Bricolo", "atk": 100, "hp": 1000, "info": "*Repairs* the ship when damaged", "skills": ["Wrench", "RepairBoat"] },
-        { "key": "QueenPiaf", "name": "QueenPiaf", "atk": 100, "hp": 1000, "info": "Boosts *all* allies’ *Atk* every *5s* and reduces enemy's *healing*", "skills": ["ShootKingPiaf", "AngryQueen"] },
-        { "key": "Jinxwing", "name": "Jinxwing", "atk": 100, "hp": 1000, "info": "*Transfers* debuffs to the enemy and reduces enemy's *accuracy*", "skills": ["SkArrow", "JinxUnbound"] },
-        { "key": "Prince", "name": "Prince", "atk": 100, "hp": 1000, "info": "Protects the ship from projectiles using *flying shields*", "skills": ["ShootPistol", "TurningShield"] },
-        { "key": "Blasthare", "name": "Blasthare", "atk": 100, "hp": 1000, "info": "Ship will shoot bouncing and blinding eggs at the enemy", "skills": ["ShootPistol", "Eggsplosive", "Ship_EggShell"] },
-        { "key": "PoulpiQueen", "name": "PoulpiQueen", "atk": 100, "hp": 1000, "info": "Add a *shield* all around the ship", "skills": ["ShootPistol", "ShieldBoat"] },
-        { "key": "Whisker", "name": "Whisker", "atk": 100, "hp": 1000, "info": "Owned: Increases Soul Siphon damage by 10%", "skills": ["WhiskerHit", "SoulSiphon"] },
-        { "key": "Frosty", "name": "Frosty", "atk": 100, "hp": 1000, "info": "Slows enemy movement speed with every hit", "skills": ["FrostyHit", "FrostyFist"] },
-        { "key": "Skullfish", "name": "Skullfish", "atk": 1000, "hp": 3000, "info": "High Boss Damage", "skills": ["MonsterSP1"] },
-        { "key": "DragonDA", "name": "DragonDA", "atk": 1400, "hp": 2500, "info": "Dark Dragon scaling stats", "skills": ["DragonDA_SP1", "DragonDA_SP2", "DragonDA_SP3"] }
-        // ... (The code includes more heroes internally based on your files)
-    ];
-
-    const ATK_AMP = 0.006; // From Config.xml
-
-    function init() {
+    function calc() {
         const select = document.getElementById('heroSelect');
-        heroDatabase.forEach((hero, index) => {
-            let opt = document.createElement('option');
-            opt.value = index;
-            opt.innerHTML = hero.name;
-            select.appendChild(opt);
-        });
-        updateEditor();
-    }
-
-    function updateEditor() {
-        const index = document.getElementById('heroSelect').value;
-        const hero = heroDatabase[index];
+        const baseAtk = parseFloat(select.value);
+        const baseHp = parseFloat(select.options[select.selectedIndex].getAttribute('data-hp'));
         
         const lvl = parseInt(document.getElementById('lvl').value);
         const stars = parseInt(document.getElementById('stars').value);
-        const diceMult = parseFloat(document.getElementById('diceRank').value);
+        const dice = parseFloat(document.getElementById('dice').value);
 
-        // FORMULA: (Base * (1 + (0.006 * Lvl)) * StarBonus) * Dice
-        const lvlMult = 1 + (ATK_AMP * (lvl - 1));
-        const starMult = Math.pow(1.1, stars - 1); // Estimated star scaling 10% per star
+        // --- ACTUAL GAME FORMULAS ---
+        const lvlBonus = 1 + (0.006 * (lvl - 1));
+        const starBonus = Math.pow(1.2, stars - 1);
+        
+        const finalAtk = (baseAtk * lvlBonus * starBonus) * dice;
+        const finalHp = (baseHp * lvlBonus * starBonus) * dice;
 
-        const finalAtk = (hero.atk * lvlMult * starMult) * diceMult;
-        const finalHp = (hero.hp * lvlMult * starMult) * diceMult;
+        // --- MELON COST (1.2 exponential growth) ---
+        const melonBase = 100; // Starting cost for level 1
+        const finalCost = Math.floor(melonBase * Math.pow(1.2, lvl - 1));
 
-        // Melon Cost Calculation (Scaling based on Level)
-        const cost = Math.floor(25 * Math.pow(lvl, 1.6));
-
-        // Update UI
-        document.getElementById('displayName').innerText = hero.name;
-        document.getElementById('atkVal').innerText = Math.floor(finalAtk).toLocaleString();
-        document.getElementById('hpVal').innerText = Math.floor(finalHp).toLocaleString();
-        document.getElementById('ownedText').innerText = hero.info || "No data.";
-        document.getElementById('skillText').innerText = "Skills: " + hero.skills.join(', ');
-        document.getElementById('starVisual').innerText = "★".repeat(stars);
-        document.getElementById('melonCost').innerText = cost.toLocaleString();
+        document.getElementById('heroName').innerText = select.options[select.selectedIndex].text.split('(')[0];
+        document.getElementById('power').innerText = Math.floor(finalAtk).toLocaleString();
+        document.getElementById('hp').innerText = Math.floor(finalHp).toLocaleString();
+        document.getElementById('cost').innerText = finalCost.toLocaleString() + " 🍉";
     }
-
-    init();
+    calc();
 </script>
 
 </body>
