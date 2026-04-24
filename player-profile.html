@@ -3,125 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bounty Bash | Knowledge Profile</title>
+    <title>Bounty Bash | Knowledge Sync</title>
     <style>
         :root {
-            --melon: #2ecc71;
-            --dice: #9b59b6;
-            --accent: #f1c40f;
-            --bg: #0a0a0a;
+            --game-green: #2ecc71;
+            --game-yellow: #f1c40f;
+            --game-red: #e74c3c;
+            --bg-dark: #0a0a0a;
             --panel: #161616;
             --input-bg: #222;
         }
 
         body { 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            background: var(--bg); 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
+            background: var(--bg-dark); 
             color: #eee; 
             margin: 0; 
-            padding-bottom: 100px; 
+            padding-bottom: 120px; 
         }
 
         nav { 
             background: #000; 
-            border-bottom: 2px solid var(--melon); 
+            border-bottom: 2px solid var(--game-green); 
             padding: 1rem 2rem; 
             display: flex; 
             justify-content: space-between; 
-            align-items: center; 
         }
 
-        nav a { color: white; text-decoration: none; font-weight: bold; margin-left: 20px; font-size: 0.9rem; }
+        nav a { color: white; text-decoration: none; font-weight: bold; margin-left: 20px; }
 
-        .container { max-width: 1100px; margin: 20px auto; padding: 0 20px; }
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
 
-        /* Categorized Headers */
-        .category-header {
-            background: linear-gradient(90deg, #1a1a1a, transparent);
-            color: var(--accent);
-            padding: 10px 15px;
-            border-left: 4px solid var(--accent);
+        /* Headers matching the game tabs */
+        .tab-header {
+            background: #222;
+            color: var(--game-yellow);
+            padding: 12px 20px;
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
+            border-left: 5px solid var(--game-yellow);
             margin: 30px 0 15px 0;
-            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
         }
 
-        .grid { 
+        .stat-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); 
-            gap: 12px; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 10px; 
         }
 
-        .stat-card {
+        .stat-item {
             background: var(--panel);
             border: 1px solid #333;
-            padding: 12px;
-            border-radius: 6px;
+            padding: 15px;
+            border-radius: 4px;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
         }
 
         label { 
-            font-size: 0.65rem; 
-            color: #888; 
-            text-transform: uppercase; 
-            margin-bottom: 6px; 
-            font-weight: 700;
+            font-size: 0.85rem; 
+            color: #ccc; 
+            font-weight: 600;
+            flex: 1;
         }
 
         input {
             background: var(--input-bg);
             border: 1px solid #444;
-            color: #fff;
-            padding: 10px;
+            color: var(--game-green);
+            padding: 8px;
             border-radius: 4px;
-            font-size: 1rem;
-            width: 100%;
-            box-sizing: border-box;
+            width: 80px;
+            text-align: right;
+            font-weight: bold;
+            font-family: monospace;
         }
 
-        input:focus { border-color: var(--melon); outline: none; background: #2a2a2a; }
+        input:focus { border-color: var(--game-yellow); outline: none; }
 
-        /* Calculation Footer */
-        .footer-stats {
+        /* Sync Footer */
+        .footer-bar {
             position: fixed;
             bottom: 0;
-            left: 0;
-            right: 0;
+            width: 100%;
             background: #000;
-            border-top: 2px solid var(--melon);
-            padding: 15px 30px;
+            border-top: 3px solid var(--game-green);
+            padding: 20px;
             display: flex;
             justify-content: space-around;
             align-items: center;
-            z-index: 1000;
+            box-sizing: border-box;
         }
 
-        .total-display { text-align: center; }
-        .total-display span { display: block; font-size: 0.6rem; color: #777; text-transform: uppercase; }
-        .total-display b { font-size: 1.4rem; color: var(--melon); }
+        .summary-stat b { color: var(--game-yellow); font-size: 1.5rem; }
+        .summary-stat span { display: block; font-size: 0.7rem; color: #888; text-transform: uppercase; }
 
         .btn-sync {
-            background: var(--melon);
-            color: #000;
+            background: var(--game-green);
+            color: black;
             border: none;
-            padding: 12px 40px;
+            padding: 15px 40px;
             font-weight: 900;
-            text-transform: uppercase;
             border-radius: 4px;
             cursor: pointer;
-            transition: 0.2s;
+            text-transform: uppercase;
         }
-
-        .btn-sync:hover { background: white; transform: translateY(-2px); }
     </style>
 </head>
 <body>
 
 <nav>
-    <div style="font-weight: 900; color: var(--melon);">BOUNTY BASH CALCULATOR</div>
+    <div style="font-weight: 900; color: var(--game-green);">KNOWLEDGE SYNC</div>
     <div>
         <a href="index.html">Home</a>
         <a href="hero-editor.html">Hero Editor</a>
@@ -130,119 +126,110 @@
 </nav>
 
 <div class="container">
-    
-    <div class="category-header">ATK KNOWLEDGE</div>
-    <div class="grid">
-        <div class="stat-card"><label>Base Atk (Flat)</label><input type="number" id="baseAtk" value="0"></div>
-        <div class="stat-card"><label>Increase Atk (%)</label><input type="number" id="incAtk" value="0"></div>
-        <div class="stat-card"><label>Atk & HP (%)</label><input type="number" id="atkHp" value="0"></div>
-        <div class="stat-card"><label>Atk Speed (%)</label><input type="number" id="atkSpd" value="0"></div>
-        <div class="stat-card"><label>Atk Amp (%)</label><input type="number" id="atkAmp" value="0"></div>
-        <div class="stat-card"><label>Atk (Relic) (%)</label><input type="number" id="relAtk" value="0"></div>
-        <div class="stat-card"><label>Atk & HP (Relic) (%)</label><input type="number" id="relAtkHp" value="0"></div>
-        <div class="stat-card"><label>Atk (Arena League) (%)</label><input type="number" id="arnAtk" value="0"></div>
-        <div class="stat-card"><label>Super Atk (%)</label><input type="number" id="supAtk" value="0"></div>
-        <div class="stat-card"><label>Hyper Atk (%)</label><input type="number" id="hypAtk" value="0"></div>
-        <div class="stat-card"><label>Ultra Atk (%)</label><input type="number" id="ultAtk" value="0"></div>
-        <div class="stat-card"><label>Hero Base Atk (%)</label><input type="number" id="heroBaseAtk" value="0"></div>
+
+    <div class="tab-header"><span>ATK</span><span>(Multiplier)</span></div>
+    <div class="stat-grid">
+        <div class="stat-item"><label>Base Atk</label><input type="number" id="baseAtk" value="0"></div>
+        <div class="stat-item"><label>Increase Atk (%)</label><input type="number" id="incAtk" value="0"></div>
+        <div class="stat-item"><label>Atk & HP (%)</label><input type="number" id="atkHp" value="0"></div>
+        <div class="stat-item"><label>Atk Speed (%)</label><input type="number" id="atkSpd" value="0"></div>
+        <div class="stat-item"><label>Atk Amp (%)</label><input type="number" id="atkAmp" value="0"></div>
+        <div class="stat-item"><label>Atk (Relic) (%)</label><input type="number" id="relAtk" value="0"></div>
+        <div class="stat-item"><label>Atk & HP (Relic) (%)</label><input type="number" id="relAtkHp" value="0"></div>
+        <div class="stat-item"><label>Atk (Arena League) (%)</label><input type="number" id="arnAtk" value="0"></div>
+        <div class="stat-item"><label>Super Atk (%)</label><input type="number" id="supAtk" value="0"></div>
+        <div class="stat-item"><label>Hyper Atk (%)</label><input type="number" id="hypAtk" value="0"></div>
+        <div class="stat-item"><label>Ultra Atk (%)</label><input type="number" id="ultAtk" value="0"></div>
+        <div class="stat-item"><label>Hero Base Atk (%)</label><input type="number" id="heroBaseAtk" value="0"></div>
     </div>
 
-    <div class="category-header">HP KNOWLEDGE</div>
-    <div class="grid">
-        <div class="stat-card"><label>Base HP (Flat)</label><input type="number" id="baseHp" value="0"></div>
-        <div class="stat-card"><label>Recover HP (Flat)</label><input type="number" id="recHp" value="0"></div>
-        <div class="stat-card"><label>Recover HP Up (%)</label><input type="number" id="recHpP" value="0"></div>
-        <div class="stat-card"><label>Increase HP (%)</label><input type="number" id="incHp" value="0"></div>
-        <div class="stat-card"><label>Hp Amp (%)</label><input type="number" id="hpAmp" value="0"></div>
-        <div class="stat-card"><label>Hp (Relic) (%)</label><input type="number" id="relHp" value="0"></div>
-        <div class="stat-card"><label>Hp (Arena League) (%)</label><input type="number" id="arnHp" value="0"></div>
-        <div class="stat-card"><label>Super HP (%)</label><input type="number" id="supHp" value="0"></div>
-        <div class="stat-card"><label>Hyper HP (%)</label><input type="number" id="hypHp" value="0"></div>
-        <div class="stat-card"><label>Ultra HP (%)</label><input type="number" id="ultHp" value="0"></div>
+    <div class="tab-header"><span>HP</span><span>(Survivability)</span></div>
+    <div class="stat-grid">
+        <div class="stat-item"><label>Base HP</label><input type="number" id="baseHp" value="0"></div>
+        <div class="stat-item"><label>Recover HP</label><input type="number" id="recHp" value="0"></div>
+        <div class="stat-item"><label>Recover HP Up (%)</label><input type="number" id="recHpP" value="0"></div>
+        <div class="stat-item"><label>Increase HP (%)</label><input type="number" id="incHp" value="0"></div>
+        <div class="stat-item"><label>Hp Amp (%)</label><input type="number" id="hpAmp" value="0"></div>
+        <div class="stat-item"><label>Hp (Relic) (%)</label><input type="number" id="relHp" value="0"></div>
+        <div class="stat-item"><label>Hp (Arena League) (%)</label><input type="number" id="arnHp" value="0"></div>
+        <div class="stat-item"><label>Super HP (%)</label><input type="number" id="supHp" value="0"></div>
+        <div class="stat-item"><label>Hyper HP (%)</label><input type="number" id="hypHp" value="0"></div>
+        <div class="stat-item"><label>Ultra HP (%)</label><input type="number" id="ultHp" value="0"></div>
     </div>
 
-    <div class="category-header">MISC KNOWLEDGE</div>
-    <div class="grid">
-        <div class="stat-card"><label>Dice Battle Up (%)</label><input type="number" id="diceBattle" value="0"></div>
-        <div class="stat-card"><label>Loot Coin Idle Up (%)</label><input type="number" id="lootCoin" value="0"></div>
-        <div class="stat-card"><label>Metal Idle Up (%)</label><input type="number" id="metalIdle" value="0"></div>
-        <div class="stat-card"><label>Ore Battle Up (%)</label><input type="number" id="oreBattle" value="0"></div>
-        <div class="stat-card"><label>Smasher Dmg Up (%)</label><input type="number" id="smasherDmg" value="0"></div>
-        <div class="stat-card"><label>Artifact ATK (%)</label><input type="number" id="artAtkTotal" value="0"></div>
-        <div class="stat-card"><label>Gem ATK (%)</label><input type="number" id="gemAtkTotal" value="0"></div>
+    <div class="tab-header"><span>MISC</span><span>(Economy)</span></div>
+    <div class="stat-grid">
+        <div class="stat-item"><label>Dice Battle Up (%)</label><input type="number" id="diceBattle" value="0"></div>
+        <div class="stat-item"><label>Reduce Village Wood Upgrade Cost (%)</label><input type="number" id="redWood" value="0"></div>
+        <div class="stat-item"><label>Reduce Village Stone Upgrade Cost (%)</label><input type="number" id="redStone" value="0"></div>
+        <div class="stat-item"><label>Reduce Hero LvUp Cost (%)</label><input type="number" id="redHero" value="0"></div>
+        <div class="stat-item"><label>Reduce Gear LvUp Cost (%)</label><input type="number" id="redGear" value="0"></div>
+        <div class="stat-item"><label>Loot Coin Idle Up (%)</label><input type="number" id="lootCoin" value="0"></div>
+        <div class="stat-item"><label>Metal Idle Up (%)</label><input type="number" id="metalIdle" value="0"></div>
+        <div class="stat-item"><label>Metal Battle Up (%)</label><input type="number" id="metalBattle" value="0"></div>
+        <div class="stat-item"><label>Ore Battle Up (%)</label><input type="number" id="oreBattle" value="0"></div>
+        <div class="stat-item"><label>Stone Battle Up (%)</label><input type="number" id="stoneBattle" value="0"></div>
     </div>
 
 </div>
 
-<div class="footer-stats">
-    <div class="total-display">
-        <span>Global ATK Multiplier</span>
-        <b id="totalAtkShow">1.00x</b>
+<div class="footer-bar">
+    <div class="summary-stat">
+        <span>Total ATK Mult</span>
+        <b id="atkSum">1.00x</b>
     </div>
-    <div class="total-display">
-        <span>Global HP Multiplier</span>
-        <b id="totalHpShow">1.00x</b>
+    <div class="summary-stat">
+        <span>Total HP Mult</span>
+        <b id="hpSum">1.00x</b>
     </div>
-    <button class="btn-sync" onclick="saveProfile()">Sync Account</button>
+    <button class="btn-sync" onclick="saveData()">Sync Knowledge</button>
 </div>
 
 <script>
-    const allFields = [
+    const ids = [
         'baseAtk', 'incAtk', 'atkHp', 'atkSpd', 'atkAmp', 'relAtk', 'relAtkHp', 'arnAtk', 'supAtk', 'hypAtk', 'ultAtk', 'heroBaseAtk',
         'baseHp', 'recHp', 'recHpP', 'incHp', 'hpAmp', 'relHp', 'arnHp', 'supHp', 'hypHp', 'ultHp',
-        'diceBattle', 'lootCoin', 'metalIdle', 'oreBattle', 'smasherDmg', 'artAtkTotal', 'gemAtkTotal'
+        'diceBattle', 'redWood', 'redStone', 'redHero', 'redGear', 'lootCoin', 'metalIdle', 'metalBattle', 'oreBattle', 'stoneBattle'
     ];
 
     function calculate() {
-        const getVal = (id) => parseFloat(document.getElementById(id).value) || 0;
+        const val = (id) => parseFloat(document.getElementById(id).value) || 0;
 
-        // Summing all ATK Percentages
-        const atkPct = getVal('incAtk') + getVal('atkHp') + getVal('atkAmp') + 
-                       getVal('relAtk') + getVal('relAtkHp') + getVal('arnAtk') + 
-                       getVal('supAtk') + getVal('hypAtk') + getVal('ultAtk') + 
-                       getVal('heroBaseAtk') + getVal('artAtkTotal') + getVal('gemAtkTotal');
+        // Sum ATK-related percentages
+        const atkPct = val('incAtk') + val('atkHp') + val('atkAmp') + val('relAtk') + val('relAtkHp') + 
+                       val('arnAtk') + val('supAtk') + val('hypAtk') + val('ultAtk') + val('heroBaseAtk');
 
-        // Summing all HP Percentages
-        const hpPct = getVal('incHp') + getVal('atkHp') + getVal('hpAmp') + 
-                      getVal('relHp') + getVal('relAtkHp') + getVal('arnHp') + 
-                      getVal('supHp') + getVal('hypHp') + getVal('ultHp');
+        // Sum HP-related percentages
+        const hpPct = val('incHp') + val('atkHp') + val('hpAmp') + val('relHp') + val('relAtkHp') + 
+                      val('arnHp') + val('supHp') + val('hypHp') + val('ultHp');
 
-        const finalAtkMult = 1 + (atkPct / 100);
-        const finalHpMult = 1 + (hpPct / 100);
+        const atkMult = 1 + (atkPct / 100);
+        const hpMult = 1 + (hpPct / 100);
 
-        document.getElementById('totalAtkShow').innerText = finalAtkMult.toFixed(2) + "x";
-        document.getElementById('totalHpShow').innerText = finalHpMult.toFixed(2) + "x";
+        document.getElementById('atkSum').innerText = atkMult.toFixed(2) + "x";
+        document.getElementById('hpSum').innerText = hpMult.toFixed(2) + "x";
 
-        return { finalAtkMult, finalHpMult };
+        return { atkMult, hpMult };
     }
 
-    function saveProfile() {
+    function saveData() {
         const results = calculate();
-        const saveObj = {};
-        
-        allFields.forEach(f => {
-            saveObj[f] = document.getElementById(f).value;
-        });
+        const data = {};
+        ids.forEach(id => { data[id] = document.getElementById(id).value; });
+        data.globalAtkMult = results.atkMult;
+        data.globalHpMult = results.hpMult;
 
-        saveObj.globalAtkMult = results.finalAtkMult;
-        saveObj.globalHpMult = results.finalHpMult;
-
-        localStorage.setItem('bountyBashKnowledge', JSON.stringify(saveObj));
-        alert("Knowledge Synced! Your team will now inherit these stats.");
+        localStorage.setItem('bb_knowledge', JSON.stringify(data));
+        alert("Knowledge Synced! Data ready for Hero Editor.");
     }
 
     window.onload = function() {
-        const saved = JSON.parse(localStorage.getItem('bountyBashKnowledge'));
+        const saved = JSON.parse(localStorage.getItem('bb_knowledge'));
         if (saved) {
-            allFields.forEach(f => {
-                if(saved[f]) document.getElementById(f).value = saved[f];
-            });
+            ids.forEach(id => { if(saved[id]) document.getElementById(id).value = saved[id]; });
         }
         calculate();
-        // Set real-time calculation
-        allFields.forEach(f => {
-            document.getElementById(f).addEventListener('input', calculate);
-        });
+        ids.forEach(id => document.getElementById(id).addEventListener('input', calculate));
     };
 </script>
 
