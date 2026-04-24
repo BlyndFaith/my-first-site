@@ -3,84 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bounty Bash | Player Profile</title>
+    <title>Bounty Bash | Hero Editor V3</title>
     <style>
-        :root {
-            --melon: #2ecc71;
-            --dice: #9b59b6;
-            --accent: #f1c40f;
-            --bg: #0a0a0a;
-            --panel: #161616;
-        }
-
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            background: var(--bg); 
-            color: #eee; 
-            margin: 0; 
-            padding-bottom: 50px; 
-        }
-
-        nav { 
-            background: #000; 
-            border-bottom: 2px solid var(--melon); 
-            padding: 1rem 2rem; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-        }
-
+        :root { --melon: #2ecc71; --accent: #f1c40f; --panel: #161616; --bg: #0a0a0a; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #eee; margin: 0; padding-bottom: 50px; }
+        nav { background: #000; border-bottom: 2px solid var(--melon); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
         nav a { color: white; text-decoration: none; font-weight: bold; margin-left: 20px; font-size: 0.9rem; }
-        nav a:hover { color: var(--melon); }
-
-        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
-        .card { background: var(--panel); border: 1px solid #333; border-radius: 12px; padding: 25px; margin-bottom: 20px; }
+        
+        .layout { display: grid; grid-template-columns: 380px 1fr; gap: 20px; max-width: 1100px; margin: 20px auto; padding: 0 20px; }
+        .box { background: var(--panel); border: 1px solid #333; padding: 20px; border-radius: 12px; }
         
         h2 { font-size: 0.8rem; text-transform: uppercase; color: var(--melon); letter-spacing: 2px; margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 10px; }
-
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .field { margin-bottom: 15px; }
-        label { display: block; font-size: 0.7rem; color: #777; text-transform: uppercase; margin-bottom: 5px; }
-        
-        input { 
-            width: 100%; 
-            background: #222; 
-            border: 1px solid #444; 
-            color: white; 
-            padding: 12px; 
-            border-radius: 6px; 
-            box-sizing: border-box;
-            font-size: 1rem;
-        }
+        label { display: block; font-size: 0.7rem; color: #777; margin-bottom: 5px; }
+        select, input { width: 100%; background: #222; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 6px; box-sizing: border-box; }
 
-        input:focus { border-color: var(--accent); outline: none; }
-
-        .summary { 
-            background: linear-gradient(145deg, #1e1e1e, #000); 
-            border: 1px solid var(--accent); 
-            padding: 20px; 
-            border-radius: 10px; 
-            text-align: center; 
-            margin-top: 20px;
-        }
-
-        .multiplier-text { font-size: 3rem; font-weight: 900; color: var(--accent); margin: 10px 0; }
-
-        .btn-save { 
-            background: var(--melon); 
-            color: black; 
-            width: 100%; 
-            border: none; 
-            padding: 18px; 
-            font-weight: 900; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            text-transform: uppercase; 
-            font-size: 1rem;
-            margin-top: 10px;
-        }
-
-        .btn-save:active { transform: scale(0.98); }
+        .big-stat { font-size: 2.8rem; font-weight: 900; color: var(--accent); text-align: center; margin: 15px 0; }
+        .profile-notice { background: #000; border-left: 4px solid var(--accent); padding: 10px; font-size: 0.8rem; color: #aaa; margin-bottom: 20px; }
+        .star-row { color: var(--accent); font-size: 1.2rem; text-align: center; }
     </style>
 </head>
 <body>
@@ -94,98 +34,115 @@
     </div>
 </nav>
 
-<div class="container">
-    <div class="card">
-        <h2>Global Attack Modifiers</h2>
-        <div class="grid">
+<div class="layout">
+    <div class="box">
+        <h2>Hero Selection</h2>
+        <div class="profile-notice">
+            ⚠️ Profile ATK Multiplier: <b id="activeMod">1.00x</b>
+        </div>
+
+        <div class="field">
+            <label>Template (From Persos.xml)</label>
+            <select id="heroSelect" onchange="runCalculation()">
+                <option value="1000" data-hp="3000">Whisker</option>
+                <option value="900" data-hp="2500">Seabeard</option>
+                <option value="1400" data-hp="2800">DragonDA</option>
+                <option value="1250" data-hp="3500">NecroDA</option>
+                <option value="100" data-hp="1000">Polly</option>
+            </select>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;">
             <div class="field">
-                <label>Knowledge Points (ATK %)</label>
-                <input type="number" id="kAtk" value="0" placeholder="e.g. 250" oninput="calculateGlobal()">
+                <label>Level</label>
+                <input type="number" id="lvl" value="1" min="1" oninput="runCalculation()">
             </div>
             <div class="field">
-                <label>Artifact Power (%)</label>
-                <input type="number" id="artAtk" value="0" oninput="calculateGlobal()">
+                <label>Stars (1.2x each)</label>
+                <input type="number" id="stars" value="1" min="1" max="10" oninput="runCalculation()">
             </div>
         </div>
-        <div class="grid">
-            <div class="field">
-                <label>Gem Bonus (%)</label>
-                <input type="number" id="gemAtk" value="0" oninput="calculateGlobal()">
-            </div>
-            <div class="field">
-                <label>Other/Special Buffs (%)</label>
-                <input type="number" id="otherAtk" value="0" oninput="calculateGlobal()">
-            </div>
+
+        <h2>🎲 Dice Effects</h2>
+        <div class="field">
+            <label>Dice Roll Rank</label>
+            <select id="dice" onchange="runCalculation()">
+                <option value="1">No Effect</option>
+                <option value="1.25">Rank A (+25%)</option>
+                <option value="1.50">Rank S (+50%)</option>
+                <option value="2.00">Rank SS (+100%)</option>
+            </select>
         </div>
     </div>
 
-    <div class="card">
-        <h2>Global HP Modifiers</h2>
-        <div class="grid">
-            <div class="field">
-                <label>Knowledge Points (HP %)</label>
-                <input type="number" id="kHp" value="0" oninput="calculateGlobal()">
+    <div class="box" style="text-align: center;">
+        <div class="star-row" id="starVis">★</div>
+        <h1 id="heroName" style="margin: 5px 0;">Hero</h1>
+        
+        <div style="margin: 30px 0;">
+            <label>TOTAL CALCULATED ATTACK</label>
+            <div class="big-stat" id="resAtk">0</div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div style="background: #000; padding: 15px; border-radius: 8px;">
+                <label>Total HP</label>
+                <div id="resHp" style="font-size: 1.5rem; font-weight: bold; color: #e74c3c;">0</div>
             </div>
-            <div class="field">
-                <label>Artifact Power (HP %)</label>
-                <input type="number" id="artHp" value="0" oninput="calculateGlobal()">
+            <div style="background: #000; padding: 15px; border-radius: 8px;">
+                <label>Upgrade Cost</label>
+                <div id="resCost" style="font-size: 1.5rem; font-weight: bold; color: var(--melon);">0 🍉</div>
             </div>
         </div>
+        
+        <p style="font-size: 0.75rem; color: #555; margin-top: 30px; text-align: left; line-height: 1.5;">
+            <b>FORMULA:</b> (BaseAtk * LvlScaling * StarPower * DiceRoll) * ProfileMultiplier<br>
+            <i>Note: LvlScaling uses the 0.006 (0.6%) amp found in Config.xml</i>
+        </p>
     </div>
-
-    <div class="summary">
-        <label style="color: var(--accent);">Your Total Account ATK Multiplier</label>
-        <div class="multiplier-text" id="displayMult">1.00x</div>
-        <div style="font-size: 0.8rem; color: #666;">This multiplier will be applied to every hero in the Editor.</div>
-    </div>
-
-    <button class="btn-save" onclick="saveProfile()">Save Profile & Apply to Heroes</button>
 </div>
 
 <script>
-    function calculateGlobal() {
-        // Get values
-        const kAtk = parseFloat(document.getElementById('kAtk').value) || 0;
-        const artAtk = parseFloat(document.getElementById('artAtk').value) || 0;
-        const gemAtk = parseFloat(document.getElementById('gemAtk').value) || 0;
-        const otherAtk = parseFloat(document.getElementById('otherAtk').value) || 0;
+    let globalAtkMult = 1.00;
 
-        // Formula: 1 + (Sum of all percentages / 100)
-        const totalAtkMult = 1 + ((kAtk + artAtk + gemAtk + otherAtk) / 100);
-        
-        document.getElementById('displayMult').innerText = totalAtkMult.toFixed(2) + "x";
-        return totalAtkMult;
-    }
-
-    function saveProfile() {
-        const data = {
-            kAtk: document.getElementById('kAtk').value,
-            artAtk: document.getElementById('artAtk').value,
-            gemAtk: document.getElementById('gemAtk').value,
-            otherAtk: document.getElementById('otherAtk').value,
-            kHp: document.getElementById('kHp').value,
-            artHp: document.getElementById('artHp').value,
-            atkMult: calculateGlobal()
-        };
-
-        // This saves the data to the browser's memory
-        localStorage.setItem('bountyBashProfile', JSON.stringify(data));
-        alert("Profile Synced! Your heroes will now be much stronger.");
-    }
-
-    // Load data when page opens
-    window.onload = function() {
+    function loadProfile() {
         const saved = JSON.parse(localStorage.getItem('bountyBashProfile'));
         if (saved) {
-            document.getElementById('kAtk').value = saved.kAtk;
-            document.getElementById('artAtk').value = saved.artAtk;
-            document.getElementById('gemAtk').value = saved.gemAtk;
-            document.getElementById('otherAtk').value = saved.otherAtk;
-            document.getElementById('kHp').value = saved.kHp;
-            document.getElementById('artHp').value = saved.artHp;
-            calculateGlobal();
+            globalAtkMult = parseFloat(saved.atkMult);
+            document.getElementById('activeMod').innerText = globalAtkMult.toFixed(2) + "x";
         }
-    };
+        runCalculation();
+    }
+
+    function runCalculation() {
+        const select = document.getElementById('heroSelect');
+        const baseAtk = parseFloat(select.value);
+        const baseHp = parseFloat(select.options[select.selectedIndex].getAttribute('data-hp'));
+        
+        const lvl = parseInt(document.getElementById('lvl').value);
+        const stars = parseInt(document.getElementById('stars').value);
+        const dice = parseFloat(document.getElementById('dice').value);
+
+        // --- GAME FORMULAS ---
+        const lvlScaling = 1 + (0.006 * (lvl - 1));
+        const starPower = Math.pow(1.2, stars - 1); // 1.2 multiplier from Config.xml
+        
+        // Final math including the Profile Multiplier
+        const finalAtk = (baseAtk * lvlScaling * starPower * dice) * globalAtkMult;
+        const finalHp = (baseHp * lvlScaling * starPower * dice);
+
+        // Melon Cost (1.2 growth)
+        const finalCost = Math.floor(100 * Math.pow(1.2, lvl - 1));
+
+        // Update UI
+        document.getElementById('heroName').innerText = select.options[select.selectedIndex].text;
+        document.getElementById('starVis').innerText = "★".repeat(stars);
+        document.getElementById('resAtk').innerText = Math.floor(finalAtk).toLocaleString();
+        document.getElementById('resHp').innerText = Math.floor(finalHp).toLocaleString();
+        document.getElementById('resCost').innerText = finalCost.toLocaleString() + " 🍉";
+    }
+
+    window.onload = loadProfile;
 </script>
 
 </body>
