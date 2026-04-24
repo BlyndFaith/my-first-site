@@ -8,7 +8,6 @@
         :root {
             --game-green: #2ecc71;
             --game-yellow: #f1c40f;
-            --game-red: #e74c3c;
             --bg-dark: #0a0a0a;
             --panel: #161616;
             --input-bg: #222;
@@ -34,7 +33,7 @@
 
         .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
 
-        /* Headers matching the game tabs */
+        /* Headers matching the game tabs exactly */
         .tab-header {
             background: #222;
             color: var(--game-yellow);
@@ -50,14 +49,14 @@
 
         .stat-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-            gap: 10px; 
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 8px; 
         }
 
         .stat-item {
             background: var(--panel);
             border: 1px solid #333;
-            padding: 15px;
+            padding: 12px 15px;
             border-radius: 4px;
             display: flex;
             align-items: center;
@@ -65,7 +64,7 @@
         }
 
         label { 
-            font-size: 0.85rem; 
+            font-size: 0.8rem; 
             color: #ccc; 
             font-weight: 600;
             flex: 1;
@@ -77,7 +76,7 @@
             color: var(--game-green);
             padding: 8px;
             border-radius: 4px;
-            width: 80px;
+            width: 90px;
             text-align: right;
             font-weight: bold;
             font-family: monospace;
@@ -85,7 +84,6 @@
 
         input:focus { border-color: var(--game-yellow); outline: none; }
 
-        /* Sync Footer */
         .footer-bar {
             position: fixed;
             bottom: 0;
@@ -97,6 +95,7 @@
             justify-content: space-around;
             align-items: center;
             box-sizing: border-box;
+            z-index: 1000;
         }
 
         .summary-stat b { color: var(--game-yellow); font-size: 1.5rem; }
@@ -127,15 +126,15 @@
 
 <div class="container">
 
-    <div class="tab-header"><span>ATK</span><span>(Multiplier)</span></div>
+    <div class="tab-header"><span>ATK KNOWLEDGE</span></div>
     <div class="stat-grid">
         <div class="stat-item"><label>Base Atk</label><input type="number" id="baseAtk" value="0"></div>
         <div class="stat-item"><label>Increase Atk (%)</label><input type="number" id="incAtk" value="0"></div>
-        <div class="stat-item"><label>Atk & HP (%)</label><input type="number" id="atkHp" value="0"></div>
+        <div class="stat-item"><label>Atk & HP (%)</label><input type="number" id="atkHp" class="shared-atkhp" value="0"></div>
         <div class="stat-item"><label>Atk Speed (%)</label><input type="number" id="atkSpd" value="0"></div>
         <div class="stat-item"><label>Atk Amp (%)</label><input type="number" id="atkAmp" value="0"></div>
         <div class="stat-item"><label>Atk (Relic) (%)</label><input type="number" id="relAtk" value="0"></div>
-        <div class="stat-item"><label>Atk & HP (Relic) (%)</label><input type="number" id="relAtkHp" value="0"></div>
+        <div class="stat-item"><label>Atk & HP (Relic) (%)</label><input type="number" id="relAtkHp" class="shared-atkhprelic" value="0"></div>
         <div class="stat-item"><label>Atk (Arena League) (%)</label><input type="number" id="arnAtk" value="0"></div>
         <div class="stat-item"><label>Super Atk (%)</label><input type="number" id="supAtk" value="0"></div>
         <div class="stat-item"><label>Hyper Atk (%)</label><input type="number" id="hypAtk" value="0"></div>
@@ -143,21 +142,23 @@
         <div class="stat-item"><label>Hero Base Atk (%)</label><input type="number" id="heroBaseAtk" value="0"></div>
     </div>
 
-    <div class="tab-header"><span>HP</span><span>(Survivability)</span></div>
+    <div class="tab-header"><span>HP KNOWLEDGE</span></div>
     <div class="stat-grid">
         <div class="stat-item"><label>Base HP</label><input type="number" id="baseHp" value="0"></div>
         <div class="stat-item"><label>Recover HP</label><input type="number" id="recHp" value="0"></div>
         <div class="stat-item"><label>Recover HP Up (%)</label><input type="number" id="recHpP" value="0"></div>
         <div class="stat-item"><label>Increase HP (%)</label><input type="number" id="incHp" value="0"></div>
+        <div class="stat-item"><label>Atk & HP (%) (Mirror)</label><input type="number" id="atkHp_mirror" class="shared-atkhp" value="0"></div>
         <div class="stat-item"><label>Hp Amp (%)</label><input type="number" id="hpAmp" value="0"></div>
         <div class="stat-item"><label>Hp (Relic) (%)</label><input type="number" id="relHp" value="0"></div>
+        <div class="stat-item"><label>Atk & HP (Relic) (%) (Mirror)</label><input type="number" id="relAtkHp_mirror" class="shared-atkhprelic" value="0"></div>
         <div class="stat-item"><label>Hp (Arena League) (%)</label><input type="number" id="arnHp" value="0"></div>
         <div class="stat-item"><label>Super HP (%)</label><input type="number" id="supHp" value="0"></div>
         <div class="stat-item"><label>Hyper HP (%)</label><input type="number" id="hypHp" value="0"></div>
         <div class="stat-item"><label>Ultra HP (%)</label><input type="number" id="ultHp" value="0"></div>
     </div>
 
-    <div class="tab-header"><span>MISC</span><span>(Economy)</span></div>
+    <div class="tab-header"><span>MISC KNOWLEDGE</span></div>
     <div class="stat-grid">
         <div class="stat-item"><label>Dice Battle Up (%)</label><input type="number" id="diceBattle" value="0"></div>
         <div class="stat-item"><label>Reduce Village Wood Upgrade Cost (%)</label><input type="number" id="redWood" value="0"></div>
@@ -171,15 +172,21 @@
         <div class="stat-item"><label>Stone Battle Up (%)</label><input type="number" id="stoneBattle" value="0"></div>
     </div>
 
+    <div class="tab-header"><span>OTHER BONUSES</span></div>
+    <div class="stat-grid">
+        <div class="stat-item"><label>Total Artifact ATK (%)</label><input type="number" id="artAtk" value="0"></div>
+        <div class="stat-item"><label>Total Gem ATK (%)</label><input type="number" id="gemAtk" value="0"></div>
+    </div>
+
 </div>
 
 <div class="footer-bar">
     <div class="summary-stat">
-        <span>Total ATK Mult</span>
+        <span>Total ATK Multiplier</span>
         <b id="atkSum">1.00x</b>
     </div>
     <div class="summary-stat">
-        <span>Total HP Mult</span>
+        <span>Total HP Multiplier</span>
         <b id="hpSum">1.00x</b>
     </div>
     <button class="btn-sync" onclick="saveData()">Sync Knowledge</button>
@@ -189,17 +196,29 @@
     const ids = [
         'baseAtk', 'incAtk', 'atkHp', 'atkSpd', 'atkAmp', 'relAtk', 'relAtkHp', 'arnAtk', 'supAtk', 'hypAtk', 'ultAtk', 'heroBaseAtk',
         'baseHp', 'recHp', 'recHpP', 'incHp', 'hpAmp', 'relHp', 'arnHp', 'supHp', 'hypHp', 'ultHp',
-        'diceBattle', 'redWood', 'redStone', 'redHero', 'redGear', 'lootCoin', 'metalIdle', 'metalBattle', 'oreBattle', 'stoneBattle'
+        'diceBattle', 'redWood', 'redStone', 'redHero', 'redGear', 'lootCoin', 'metalIdle', 'metalBattle', 'oreBattle', 'stoneBattle',
+        'artAtk', 'gemAtk'
     ];
+
+    // Sync Shared Fields (If you type in one, it updates the other)
+    document.querySelectorAll('.shared-atkhp').forEach(el => {
+        el.addEventListener('input', (e) => {
+            document.querySelectorAll('.shared-atkhp').forEach(input => input.value = e.target.value);
+        });
+    });
+    document.querySelectorAll('.shared-atkhprelic').forEach(el => {
+        el.addEventListener('input', (e) => {
+            document.querySelectorAll('.shared-atkhprelic').forEach(input => input.value = e.target.value);
+        });
+    });
 
     function calculate() {
         const val = (id) => parseFloat(document.getElementById(id).value) || 0;
 
-        // Sum ATK-related percentages
         const atkPct = val('incAtk') + val('atkHp') + val('atkAmp') + val('relAtk') + val('relAtkHp') + 
-                       val('arnAtk') + val('supAtk') + val('hypAtk') + val('ultAtk') + val('heroBaseAtk');
+                       val('arnAtk') + val('supAtk') + val('hypAtk') + val('ultAtk') + val('heroBaseAtk') + 
+                       val('artAtk') + val('gemAtk');
 
-        // Sum HP-related percentages
         const hpPct = val('incHp') + val('atkHp') + val('hpAmp') + val('relHp') + val('relAtkHp') + 
                       val('arnHp') + val('supHp') + val('hypHp') + val('ultHp');
 
@@ -227,6 +246,9 @@
         const saved = JSON.parse(localStorage.getItem('bb_knowledge'));
         if (saved) {
             ids.forEach(id => { if(saved[id]) document.getElementById(id).value = saved[id]; });
+            // Sync mirrors on load
+            document.getElementById('atkHp_mirror').value = document.getElementById('atkHp').value;
+            document.getElementById('relAtkHp_mirror').value = document.getElementById('relAtkHp').value;
         }
         calculate();
         ids.forEach(id => document.getElementById(id).addEventListener('input', calculate));
