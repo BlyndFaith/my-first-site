@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bounty Bash | Hero Editor</title>
+    <style>
+        :root { --primary: #2c3e50; --accent: #f39c12; --bg: #ecf0f1; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; }
+        nav { background: var(--primary); padding: 1rem; display: flex; justify-content: space-between; color: white; }
+        nav a { color: white; text-decoration: none; margin-left: 15px; font-weight: bold; }
+        
+        .container { max-width: 900px; margin: 30px auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 0 20px; }
+        .box { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        
+        h2 { margin-top: 0; border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem; }
+        select, input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; }
+
+        .result-card { background: var(--primary); color: white; padding: 20px; border-radius: 8px; text-align: center; }
+        .power-num { font-size: 2.5rem; color: var(--accent); font-weight: bold; }
+        .owned-bonus { color: #2ecc71; font-weight: bold; font-size: 0.8rem; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div>⚔️ Bounty Bash TheoryCraft</div>
+    <div>
+        <a href="index.html">Home</a>
+        <a href="hero-editor.html">Hero Editor</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="box">
+        <h2>Select Hero</h2>
+        <div class="input-group">
+            <label>Character</label>
+            <select id="heroSelect" onchange="calculate()">
+                <option value="1000">Whisker</option>
+                <option value="900">Seabeard</option>
+                <option value="1200">Mecha Mog (Custom)</option>
+                <option value="850">Montacos</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Current Level</label>
+            <input type="number" id="level" value="1" min="1" oninput="calculate()">
+        </div>
+
+        <div class="input-group">
+            <label>Owned Effect (Crit Dmg %)</label>
+            <input type="number" id="ownedBonus" value="0" placeholder="e.g. 5" oninput="calculate()">
+        </div>
+    </div>
+
+    <div class="box">
+        <h2>Calculated Stats</h2>
+        <div class="result-card">
+            <div>Estimated Attack Power</div>
+            <div id="totalAtk" class="power-num">0</div>
+            <div id="critInfo" class="owned-bonus">+0% Crit Damage Active</div>
+        </div>
+        
+        <p style="font-size: 0.8rem; color: #7f8c8d; margin-top: 20px;">
+            *Using Game Config Multiplier: <b>0.006 (0.6% per level)</b>
+        </p>
+    </div>
+</div>
+
+<script>
+function calculate() {
+    // Get values from your UI
+    const baseAtk = parseFloat(document.getElementById('heroSelect').value);
+    const level = parseInt(document.getElementById('level').value);
+    const ownedCrit = parseFloat(document.getElementById('ownedBonus').value) || 0;
+
+    // The formula found in your Config.xml: Unit_AtkLvAmp (0.006)
+    const scalingFactor = 0.006;
+    
+    // Math: Base * (1 + (Scaling * Level))
+    // We add a simplified version here for your calculator
+    const levelMult = 1 + (scalingFactor * (level - 1));
+    const total = baseAtk * levelMult;
+
+    // Update the UI
+    document.getElementById('totalAtk').innerText = Math.floor(total).toLocaleString();
+    document.getElementById('critInfo').innerText = `+${ownedCrit}% Owned Crit Damage Applied`;
+}
+
+// Run once to start
+calculate();
+</script>
+
+</body>
+</html>
