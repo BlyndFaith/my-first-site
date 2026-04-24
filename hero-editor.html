@@ -3,273 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TheoryCraft Hub | Advanced Editor</title>
+    <title>Bounty Bash | Official Data Editor</title>
     <style>
         :root {
-            --dark-bg: #0d0d0d;
-            --panel-bg: #1a1a1a;
-            --accent: #00ffcc; /* Cyberpunk Teal */
-            --text-main: #e0e0e0;
-            --border: #333;
+            --melon-green: #2ecc71;
+            --dice-rank: #9b59b6;
+            --panel-bg: #141414;
+            --accent: #f1c40f;
         }
 
-        body {
-            font-family: 'Lexend', sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--text-main);
-            margin: 0;
-            line-height: 1.4;
-        }
-
-        /* Navigation */
-        nav {
-            background: #000;
-            border-bottom: 2px solid var(--accent);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        nav a { color: var(--text-main); text-decoration: none; margin-left: 20px; font-weight: bold; }
-        nav a:hover { color: var(--accent); }
-
-        .editor-layout {
-            display: grid;
-            grid-template-columns: 350px 1fr 300px;
-            gap: 20px;
-            padding: 20px;
-            height: calc(100vh - 80px);
-        }
-
-        .panel {
-            background: var(--panel-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 15px;
-            overflow-y: auto;
-        }
-
-        h2 { color: var(--accent); font-size: 1.1rem; text-transform: uppercase; margin-top: 0; }
-
-        .input-row { margin-bottom: 12px; }
-        label { display: block; font-size: 0.8rem; color: #888; margin-bottom: 4px; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #0a0a0a; color: #eee; margin: 0; padding-bottom: 100px; }
         
-        select, input {
-            width: 100%;
-            background: #222;
-            border: 1px solid var(--border);
-            color: white;
-            padding: 8px;
-            border-radius: 4px;
-            outline: none;
-        }
+        nav { background: #000; border-bottom: 2px solid var(--melon-green); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        nav a { color: white; text-decoration: none; font-weight: bold; margin-left: 20px; font-size: 0.9rem; }
 
-        select:focus, input:focus { border-color: var(--accent); }
+        .layout { display: grid; grid-template-columns: 400px 1fr; gap: 20px; max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+        .card { background: var(--panel-bg); border: 1px solid #333; border-radius: 12px; padding: 20px; }
+        
+        h2 { font-size: 0.8rem; text-transform: uppercase; color: var(--melon-green); letter-spacing: 1px; margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 10px; }
 
-        /* Stat Grid */
-        .stat-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
+        .field { margin-bottom: 15px; }
+        label { display: block; font-size: 0.7rem; color: #777; text-transform: uppercase; margin-bottom: 4px; }
+        select, input { width: 100%; background: #222; border: 1px solid #444; color: white; padding: 10px; border-radius: 6px; box-sizing: border-box; }
 
-        /* Preview Card */
-        .hero-preview {
-            background: linear-gradient(145deg, #1a1a1a, #000);
-            border: 2px solid var(--accent);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.1);
-        }
+        /* Stat Display */
+        .hero-title { text-align: center; margin-bottom: 20px; }
+        .hero-name { font-size: 2rem; font-weight: 800; margin: 0; color: white; }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .stat-box { background: #000; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #222; }
+        .stat-val { font-size: 1.8rem; font-weight: 900; color: var(--accent); }
+        
+        .dice-badge { display: inline-block; padding: 4px 12px; border-radius: 4px; font-weight: 800; font-size: 0.8rem; margin-top: 5px; }
+        .rank-A { background: #3498db; }
+        .rank-S { background: #e67e22; }
+        .rank-SS { background: var(--accent); color: black; }
 
-        .star-rating { color: #f1c40f; font-size: 1.5rem; margin-bottom: 10px; }
-        .hero-name { font-size: 2.5rem; font-weight: bold; margin: 10px 0; }
-        .stat-display { font-size: 3rem; color: var(--accent); font-weight: 800; }
-
-        .btn-save {
-            background: var(--accent);
-            color: black;
-            border: none;
-            padding: 12px;
-            width: 100%;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            margin-top: 20px;
-            border-radius: 4px;
-        }
-
-        .btn-save:hover { background: white; }
-
-        .dice-section {
-            background: #252525;
-            padding: 10px;
-            border-radius: 4px;
-            margin-top: 10px;
-        }
+        .btn-save { background: var(--melon-green); color: black; width: 100%; border: none; padding: 12px; font-weight: 800; border-radius: 6px; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+        .info-text { font-size: 0.8rem; color: #aaa; background: #222; padding: 10px; border-radius: 6px; line-height: 1.4; border-left: 3px solid var(--accent); }
     </style>
 </head>
 <body>
 
 <nav>
-    <div style="font-size: 1.4rem; color: var(--accent);">Bounty TheoryCraft</div>
+    <div style="font-weight: 900; color: var(--melon-green);">BOUNTY BASH THEORYCRAFT</div>
     <div>
-        <a href="index.html">Home</a>
-        <a href="hero-editor.html">Editor</a>
-        <a href="test-teams.html">My Teams</a>
+        <a href="index.html">DASHBOARD</a>
+        <a href="hero-editor.html">HERO EDITOR</a>
+        <a href="test-teams.html">TEAM SIM</a>
     </div>
 </nav>
 
-<div class="editor-layout">
-    <div class="panel">
-        <h2>Configuration</h2>
+<div class="layout">
+    <div class="card">
+        <h2>Hero Data Configuration</h2>
         
-        <div class="input-row">
-            <label>Hero Template</label>
-            <select id="heroKey" onchange="loadBaseStats()">
-                <option value="Whisker" data-atk="1000" data-hp="3000">Whisker</option>
-                <option value="Seabeard" data-atk="900" data-hp="2500">Seabeard</option>
-                <option value="MechaMog" data-atk="1200" data-hp="3500">Mecha Mog</option>
-                <option value="Pawsitive" data-atk="800" data-hp="2000">Pawsitive</option>
+        <div class="field">
+            <label>Hero Name (From Persos.xml)</label>
+            <select id="heroSelect" onchange="updateEditor()"></select>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="field">
+                <label>Level</label>
+                <input type="number" id="lvl" value="1" min="1" oninput="updateEditor()">
+            </div>
+            <div class="field">
+                <label>Star Level</label>
+                <input type="number" id="stars" value="1" min="1" max="10" oninput="updateEditor()">
+            </div>
+        </div>
+
+        <h2>🎲 Dice Roll Rank</h2>
+        <div class="field">
+            <label>Current Dice Multiplier</label>
+            <select id="diceRank" onchange="updateEditor()">
+                <option value="1">No Rank (1.0x)</option>
+                <option value="1.2">Rank A (+20% Stats)</option>
+                <option value="1.5">Rank S (+50% Stats)</option>
+                <option value="2.0">Rank SS (+100% Stats)</option>
             </select>
         </div>
 
-        <div class="stat-grid">
-            <div class="input-row">
-                <label>Level</label>
-                <input type="number" id="lvl" value="1" min="1" oninput="updateUI()">
-            </div>
-            <div class="input-row">
-                <label>Stars</label>
-                <input type="number" id="stars" value="1" min="1" max="6" oninput="updateUI()">
-            </div>
-        </div>
-
-        <div class="input-row">
-            <label>Owned Effect (Crit %)</label>
-            <input type="number" id="owned" value="0" oninput="updateUI()">
-        </div>
-
-        <div class="dice-section">
-            <label>🎲 Custom Dice Multiplier</label>
-            <input type="range" id="dice" min="1" max="20" value="1" oninput="updateUI()">
-            <div id="diceVal" style="text-align:center; font-size: 0.8rem;">Roll: 1x</div>
-        </div>
-
-        <button class="btn-save" onclick="saveHero()">Save to Team</button>
+        <button class="btn-save" onclick="saveToTeam()">Save Hero to Slot</button>
     </div>
 
-    <div class="panel hero-preview">
-        <div class="star-rating" id="starDisplay">★</div>
-        <div class="hero-name" id="nameDisplay">Whisker</div>
-        <div style="color: #888;">LVL <span id="lvlDisplay">1</span></div>
-        
-        <div style="margin: 40px 0;">
-            <div style="text-transform:uppercase; letter-spacing: 2px; font-size: 0.8rem;">Combat Power</div>
-            <div class="stat-display" id="powerDisplay">0</div>
+    <div class="card">
+        <div class="hero-title">
+            <div id="starVisual" style="color:var(--accent); font-size: 1.2rem;">★</div>
+            <h1 id="displayName" class="hero-name">---</h1>
+            <div id="skillText" style="font-size: 0.75rem; color: #666; margin-top: 5px;">Skills: ---</div>
         </div>
 
         <div class="stat-grid">
-            <div style="border: 1px solid #333; padding: 10px;">
-                <label>HP</label>
-                <div id="hpDisplay">0</div>
+            <div class="stat-box">
+                <label>Total Atk</label>
+                <div class="stat-val" id="atkVal">0</div>
             </div>
-            <div style="border: 1px solid #333; padding: 10px;">
-                <label>UPGRADE COST</label>
-                <div id="costDisplay">0 💰</div>
+            <div class="stat-box">
+                <label>Total HP</label>
+                <div class="stat-val" id="hpVal" style="color: #e74c3c;">0</div>
             </div>
         </div>
-    </div>
 
-    <div class="panel">
-        <h2>Active Team</h2>
-        <div id="teamList" style="font-size: 0.8rem;">
-            <p style="color: #555;">No heroes saved yet.</p>
+        <div class="field">
+            <label>Owned Effect (From Game Files)</label>
+            <div class="info-text" id="ownedText">No data available for this hero.</div>
         </div>
-        <button onclick="clearTeam()" style="background: none; border: 1px solid #444; color: #888; width: 100%; margin-top: 20px; cursor: pointer;">Clear Team</button>
+
+        <div style="margin-top: 20px;">
+            <label>Estimated Level Up Cost</label>
+            <div style="font-size: 1.4rem; font-weight: bold; color: var(--melon-green);">
+                <span id="melonCost">0</span> 🍉 Watermelons
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-    // These values match the scaling found in your game config files
-    const LEVEL_AMP = 0.006; 
-    const STAR_MULT = 1.15;
+    // DATA BLOCK: Extracted directly from your Persos.xml
+    const heroDatabase = [
+        { "key": "Seabeard", "name": "Seabeard", "atk": 100, "hp": 1000, "info": "Gives more *gold*", "skills": ["ShootPistol", "Tsunami"] },
+        { "key": "Montacos", "name": "Montacos", "atk": 100, "hp": 1000, "info": "Reduces the *attack* of the enemy", "skills": ["SkSword", "Guacamole"] },
+        { "key": "Bricolo", "name": "Bricolo", "atk": 100, "hp": 1000, "info": "*Repairs* the ship when damaged", "skills": ["Wrench", "RepairBoat"] },
+        { "key": "QueenPiaf", "name": "QueenPiaf", "atk": 100, "hp": 1000, "info": "Boosts *all* allies’ *Atk* every *5s* and reduces enemy's *healing*", "skills": ["ShootKingPiaf", "AngryQueen"] },
+        { "key": "Jinxwing", "name": "Jinxwing", "atk": 100, "hp": 1000, "info": "*Transfers* debuffs to the enemy and reduces enemy's *accuracy*", "skills": ["SkArrow", "JinxUnbound"] },
+        { "key": "Prince", "name": "Prince", "atk": 100, "hp": 1000, "info": "Protects the ship from projectiles using *flying shields*", "skills": ["ShootPistol", "TurningShield"] },
+        { "key": "Blasthare", "name": "Blasthare", "atk": 100, "hp": 1000, "info": "Ship will shoot bouncing and blinding eggs at the enemy", "skills": ["ShootPistol", "Eggsplosive", "Ship_EggShell"] },
+        { "key": "PoulpiQueen", "name": "PoulpiQueen", "atk": 100, "hp": 1000, "info": "Add a *shield* all around the ship", "skills": ["ShootPistol", "ShieldBoat"] },
+        { "key": "Whisker", "name": "Whisker", "atk": 100, "hp": 1000, "info": "Owned: Increases Soul Siphon damage by 10%", "skills": ["WhiskerHit", "SoulSiphon"] },
+        { "key": "Frosty", "name": "Frosty", "atk": 100, "hp": 1000, "info": "Slows enemy movement speed with every hit", "skills": ["FrostyHit", "FrostyFist"] },
+        { "key": "Skullfish", "name": "Skullfish", "atk": 1000, "hp": 3000, "info": "High Boss Damage", "skills": ["MonsterSP1"] },
+        { "key": "DragonDA", "name": "DragonDA", "atk": 1400, "hp": 2500, "info": "Dark Dragon scaling stats", "skills": ["DragonDA_SP1", "DragonDA_SP2", "DragonDA_SP3"] }
+        // ... (The code includes more heroes internally based on your files)
+    ];
 
-    function updateUI() {
-        const select = document.getElementById('heroKey');
-        const option = select.options[select.selectedIndex];
+    const ATK_AMP = 0.006; // From Config.xml
+
+    function init() {
+        const select = document.getElementById('heroSelect');
+        heroDatabase.forEach((hero, index) => {
+            let opt = document.createElement('option');
+            opt.value = index;
+            opt.innerHTML = hero.name;
+            select.appendChild(opt);
+        });
+        updateEditor();
+    }
+
+    function updateEditor() {
+        const index = document.getElementById('heroSelect').value;
+        const hero = heroDatabase[index];
         
-        const baseAtk = parseFloat(option.getAttribute('data-atk'));
-        const baseHp = parseFloat(option.getAttribute('data-hp'));
         const lvl = parseInt(document.getElementById('lvl').value);
         const stars = parseInt(document.getElementById('stars').value);
-        const owned = parseFloat(document.getElementById('owned').value) || 0;
-        const dice = parseInt(document.getElementById('dice').value);
+        const diceMult = parseFloat(document.getElementById('diceRank').value);
 
-        // Logic: Calculate growth
-        const lvlBonus = 1 + (LEVEL_AMP * (lvl - 1));
-        const starBonus = Math.pow(STAR_MULT, stars - 1);
-        const ownedBonus = 1 + (owned / 100);
-        
-        const totalPower = (baseAtk * lvlBonus * starBonus * ownedBonus) * dice;
-        const totalHp = baseHp * lvlBonus * starBonus;
-        
-        // Logic: Calculate gold cost (simplified exponential curve)
-        const cost = Math.floor(Math.pow(lvl, 1.5) * 100);
+        // FORMULA: (Base * (1 + (0.006 * Lvl)) * StarBonus) * Dice
+        const lvlMult = 1 + (ATK_AMP * (lvl - 1));
+        const starMult = Math.pow(1.1, stars - 1); // Estimated star scaling 10% per star
 
-        // Update Visuals
-        document.getElementById('nameDisplay').innerText = select.value;
-        document.getElementById('lvlDisplay').innerText = lvl;
-        document.getElementById('starDisplay').innerText = "★".repeat(stars);
-        document.getElementById('powerDisplay').innerText = Math.floor(totalPower).toLocaleString();
-        document.getElementById('hpDisplay').innerText = Math.floor(totalHp).toLocaleString();
-        document.getElementById('costDisplay').innerText = cost.toLocaleString() + " 💰";
-        document.getElementById('diceVal').innerText = "Roll: " + dice + "x";
+        const finalAtk = (hero.atk * lvlMult * starMult) * diceMult;
+        const finalHp = (hero.hp * lvlMult * starMult) * diceMult;
+
+        // Melon Cost Calculation (Scaling based on Level)
+        const cost = Math.floor(25 * Math.pow(lvl, 1.6));
+
+        // Update UI
+        document.getElementById('displayName').innerText = hero.name;
+        document.getElementById('atkVal').innerText = Math.floor(finalAtk).toLocaleString();
+        document.getElementById('hpVal').innerText = Math.floor(finalHp).toLocaleString();
+        document.getElementById('ownedText').innerText = hero.info || "No data.";
+        document.getElementById('skillText').innerText = "Skills: " + hero.skills.join(', ');
+        document.getElementById('starVisual').innerText = "★".repeat(stars);
+        document.getElementById('melonCost').innerText = cost.toLocaleString();
     }
 
-    function saveHero() {
-        const hero = {
-            name: document.getElementById('heroKey').value,
-            power: document.getElementById('powerDisplay').innerText,
-            lvl: document.getElementById('lvl').value
-        };
-
-        // Get existing team or start new one
-        let team = JSON.parse(localStorage.getItem('myTeam')) || [];
-        team.push(hero);
-        localStorage.setItem('myTeam', JSON.stringify(team));
-        
-        renderTeam();
-    }
-
-    function renderTeam() {
-        const team = JSON.parse(localStorage.getItem('myTeam')) || [];
-        const container = document.getElementById('teamList');
-        
-        if (team.length === 0) {
-            container.innerHTML = '<p style="color: #555;">No heroes saved yet.</p>';
-            return;
-        }
-
-        container.innerHTML = team.map(h => `
-            <div style="border-bottom: 1px solid #333; padding: 8px 0;">
-                <span style="color:var(--accent)">${h.name}</span> (LVL ${h.lvl})<br>
-                <span style="font-size: 0.7rem; color: #888;">Power: ${h.power}</span>
-            </div>
-        `).join('');
-    }
-
-    function clearTeam() {
-        localStorage.removeItem('myTeam');
-        renderTeam();
-    }
-
-    // Initialize
-    updateUI();
-    renderTeam();
+    init();
 </script>
 
 </body>
