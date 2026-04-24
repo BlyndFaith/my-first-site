@@ -3,84 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bounty Bash | Player Profile</title>
+    <title>Bounty Bash | Command Center</title>
     <style>
-        :root {
-            --melon: #2ecc71;
-            --dice: #9b59b6;
-            --accent: #f1c40f;
-            --bg: #0a0a0a;
-            --panel: #161616;
-        }
-
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            background: var(--bg); 
-            color: #eee; 
-            margin: 0; 
-            padding-bottom: 50px; 
-        }
-
-        nav { 
-            background: #000; 
-            border-bottom: 2px solid var(--melon); 
-            padding: 1rem 2rem; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-        }
-
+        :root { --melon: #2ecc71; --accent: #f1c40f; --bg: #0a0a0a; --panel: #161616; --input: #222; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #eee; margin: 0; padding-bottom: 80px; }
+        
+        nav { background: #000; border-bottom: 2px solid var(--melon); padding: 1rem 2rem; display: flex; justify-content: space-between; }
         nav a { color: white; text-decoration: none; font-weight: bold; margin-left: 20px; font-size: 0.9rem; }
-        nav a:hover { color: var(--melon); }
 
-        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
-        .card { background: var(--panel); border: 1px solid #333; border-radius: 12px; padding: 25px; margin-bottom: 20px; }
+        .container { max-width: 1000px; margin: 20px auto; padding: 0 20px; }
+        .section-title { color: var(--melon); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; margin: 30px 0 15px 0; border-bottom: 1px solid #333; padding-bottom: 5px; }
         
-        h2 { font-size: 0.8rem; text-transform: uppercase; color: var(--melon); letter-spacing: 2px; margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 10px; }
-
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .field { margin-bottom: 15px; }
-        label { display: block; font-size: 0.7rem; color: #777; text-transform: uppercase; margin-bottom: 5px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; }
+        .card { background: var(--panel); border: 1px solid #333; border-radius: 8px; padding: 15px; }
         
-        input { 
-            width: 100%; 
-            background: #222; 
-            border: 1px solid #444; 
-            color: white; 
-            padding: 12px; 
-            border-radius: 6px; 
-            box-sizing: border-box;
-            font-size: 1rem;
-        }
-
+        label { display: block; font-size: 0.65rem; color: #888; text-transform: uppercase; margin-bottom: 5px; }
+        input { width: 100%; background: var(--input); border: 1px solid #444; color: white; padding: 8px; border-radius: 4px; box-sizing: border-box; }
         input:focus { border-color: var(--accent); outline: none; }
 
-        .summary { 
-            background: linear-gradient(145deg, #1e1e1e, #000); 
-            border: 1px solid var(--accent); 
-            padding: 20px; 
-            border-radius: 10px; 
-            text-align: center; 
-            margin-top: 20px;
-        }
+        .sticky-footer { position: fixed; bottom: 0; width: 100%; background: #000; padding: 15px; border-top: 2px solid var(--accent); box-sizing: border-box; display: flex; justify-content: space-around; align-items: center; }
+        .total-stat { text-align: center; }
+        .total-stat span { display: block; font-size: 0.7rem; color: #777; }
+        .total-stat b { font-size: 1.2rem; color: var(--accent); }
 
-        .multiplier-text { font-size: 3rem; font-weight: 900; color: var(--accent); margin: 10px 0; }
-
-        .btn-save { 
-            background: var(--melon); 
-            color: black; 
-            width: 100%; 
-            border: none; 
-            padding: 18px; 
-            font-weight: 900; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            text-transform: uppercase; 
-            font-size: 1rem;
-            margin-top: 10px;
-        }
-
-        .btn-save:active { transform: scale(0.98); }
+        .btn-save { background: var(--melon); color: black; border: none; padding: 12px 30px; font-weight: 900; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -90,101 +36,119 @@
     <div>
         <a href="index.html">Home</a>
         <a href="hero-editor.html">Hero Editor</a>
-        <a href="player-profile.html">My Profile</a>
+        <a href="player-profile.html">Profile</a>
     </div>
 </nav>
 
 <div class="container">
-    <div class="card">
-        <h2>Global Attack Modifiers</h2>
-        <div class="grid">
-            <div class="field">
-                <label>Knowledge Points (ATK %)</label>
-                <input type="number" id="kAtk" value="0" placeholder="e.g. 250" oninput="calculateGlobal()">
-            </div>
-            <div class="field">
-                <label>Artifact Power (%)</label>
-                <input type="number" id="artAtk" value="0" oninput="calculateGlobal()">
-            </div>
-        </div>
-        <div class="grid">
-            <div class="field">
-                <label>Gem Bonus (%)</label>
-                <input type="number" id="gemAtk" value="0" oninput="calculateGlobal()">
-            </div>
-            <div class="field">
-                <label>Other/Special Buffs (%)</label>
-                <input type="number" id="otherAtk" value="0" oninput="calculateGlobal()">
-            </div>
-        </div>
+    <div class="section-title">Knowledge: Base Stats (Flat)</div>
+    <div class="grid">
+        <div class="card"><label>Base ATK</label><input type="number" id="baseAtk" value="0"></div>
+        <div class="card"><label>Base HP</label><input type="number" id="baseHp" value="0"></div>
+        <div class="card"><label>Recover HP</label><input type="number" id="recHp" value="0"></div>
     </div>
 
-    <div class="card">
-        <h2>Global HP Modifiers</h2>
-        <div class="grid">
-            <div class="field">
-                <label>Knowledge Points (HP %)</label>
-                <input type="number" id="kHp" value="0" oninput="calculateGlobal()">
-            </div>
-            <div class="field">
-                <label>Artifact Power (HP %)</label>
-                <input type="number" id="artHp" value="0" oninput="calculateGlobal()">
-            </div>
-        </div>
+    <div class="section-title">Knowledge: Percentage Boosts</div>
+    <div class="grid">
+        <div class="card"><label>Recover HP %</label><input type="number" id="recHpP" value="0"></div>
+        <div class="card"><label>Increase ATK %</label><input type="number" id="incAtk" value="0"></div>
+        <div class="card"><label>Increase HP %</label><input type="number" id="incHp" value="0"></div>
+        <div class="card"><label>ATK & HP %</label><input type="number" id="atkHp" value="0"></div>
+        <div class="card"><label>ATK Speed %</label><input type="number" id="atkSpd" value="0"></div>
+        <div class="card"><label>ATK Amp %</label><input type="number" id="atkAmp" value="0"></div>
+        <div class="card"><label>HP Amp %</label><input type="number" id="hpAmp" value="0"></div>
     </div>
 
-    <div class="summary">
-        <label style="color: var(--accent);">Your Total Account ATK Multiplier</label>
-        <div class="multiplier-text" id="displayMult">1.00x</div>
-        <div style="font-size: 0.8rem; color: #666;">This multiplier will be applied to every hero in the Editor.</div>
+    <div class="section-title">Knowledge: Relic & Arena</div>
+    <div class="grid">
+        <div class="card"><label>ATK (Relic) %</label><input type="number" id="relAtk" value="0"></div>
+        <div class="card"><label>HP (Relic) %</label><input type="number" id="relHp" value="0"></div>
+        <div class="card"><label>ATK & HP (Relic) %</label><input type="number" id="relAtkHp" value="0"></div>
+        <div class="card"><label>ATK (Arena) %</label><input type="number" id="arnAtk" value="0"></div>
+        <div class="card"><label>HP (Arena) %</label><input type="number" id="arnHp" value="0"></div>
     </div>
 
-    <button class="btn-save" onclick="saveProfile()">Save Profile & Apply to Heroes</button>
+    <div class="section-title">Knowledge: Advanced Tiers</div>
+    <div class="grid">
+        <div class="card"><label>Super ATK %</label><input type="number" id="supAtk" value="0"></div>
+        <div class="card"><label>Super HP %</label><input type="number" id="supHp" value="0"></div>
+        <div class="card"><label>Hyper ATK %</label><input type="number" id="hypAtk" value="0"></div>
+        <div class="card"><label>Hyper HP %</label><input type="number" id="hypHp" value="0"></div>
+        <div class="card"><label>Ultra ATK %</label><input type="number" id="ultAtk" value="0"></div>
+        <div class="card"><label>Ultra HP %</label><input type="number" id="ultHp" value="0"></div>
+    </div>
+
+    <div class="section-title">Artifacts & Gems</div>
+    <div class="grid">
+        <div class="card"><label>Total Artifact ATK %</label><input type="number" id="artAtkTotal" value="0"></div>
+        <div class="card"><label>Total Gem ATK %</label><input type="number" id="gemAtkTotal" value="0"></div>
+        <div class="card"><label>Hero Base ATK %</label><input type="number" id="heroBaseAtk" value="0"></div>
+    </div>
+</div>
+
+<div class="sticky-footer">
+    <div class="total-stat">
+        <span>Account ATK Multiplier</span>
+        <b id="finalAtkMult">1.00x</b>
+    </div>
+    <div class="total-stat">
+        <span>Account HP Multiplier</span>
+        <b id="finalHpMult">1.00x</b>
+    </div>
+    <button class="btn-save" onclick="saveProfile()">Sync Profile</button>
 </div>
 
 <script>
-    function calculateGlobal() {
-        // Get values
-        const kAtk = parseFloat(document.getElementById('kAtk').value) || 0;
-        const artAtk = parseFloat(document.getElementById('artAtk').value) || 0;
-        const gemAtk = parseFloat(document.getElementById('gemAtk').value) || 0;
-        const otherAtk = parseFloat(document.getElementById('otherAtk').value) || 0;
+    const fields = [
+        'baseAtk', 'baseHp', 'recHp', 'recHpP', 'incAtk', 'incHp', 'atkHp', 'atkSpd', 
+        'atkAmp', 'hpAmp', 'relAtk', 'relHp', 'relAtkHp', 'arnAtk', 'arnHp', 
+        'supAtk', 'supHp', 'hypAtk', 'hypHp', 'ultAtk', 'ultHp', 'artAtkTotal', 'gemAtkTotal', 'heroBaseAtk'
+    ];
 
-        // Formula: 1 + (Sum of all percentages / 100)
-        const totalAtkMult = 1 + ((kAtk + artAtk + gemAtk + otherAtk) / 100);
+    function calculate() {
+        const getVal = (id) => parseFloat(document.getElementById(id).value) || 0;
+
+        // Calculate ATK Multiplier: 1 + (Sum of all ATK related percentages / 100)
+        const atkPercentSum = getVal('incAtk') + getVal('atkHp') + getVal('atkAmp') + 
+                              getVal('relAtk') + getVal('relAtkHp') + getVal('arnAtk') + 
+                              getVal('supAtk') + getVal('hypAtk') + getVal('ultAtk') + 
+                              getVal('artAtkTotal') + getVal('gemAtkTotal') + getVal('heroBaseAtk');
         
-        document.getElementById('displayMult').innerText = totalAtkMult.toFixed(2) + "x";
-        return totalAtkMult;
+        const hpPercentSum = getVal('incHp') + getVal('atkHp') + getVal('hpAmp') + 
+                             getVal('relHp') + getVal('relAtkHp') + getVal('arnHp') + 
+                             getVal('supHp') + getVal('hypHp') + getVal('ultHp');
+
+        const atkMult = 1 + (atkPercentSum / 100);
+        const hpMult = 1 + (hpPercentSum / 100);
+
+        document.getElementById('finalAtkMult').innerText = atkMult.toFixed(2) + "x";
+        document.getElementById('finalHpMult').innerText = hpMult.toFixed(2) + "x";
+
+        return { atkMult, hpMult };
     }
 
     function saveProfile() {
-        const data = {
-            kAtk: document.getElementById('kAtk').value,
-            artAtk: document.getElementById('artAtk').value,
-            gemAtk: document.getElementById('gemAtk').value,
-            otherAtk: document.getElementById('otherAtk').value,
-            kHp: document.getElementById('kHp').value,
-            artHp: document.getElementById('artHp').value,
-            atkMult: calculateGlobal()
-        };
+        const results = calculate();
+        const profileData = {};
+        fields.forEach(f => { profileData[f] = document.getElementById(f).value; });
+        profileData.atkMult = results.atkMult;
+        profileData.hpMult = results.hpMult;
 
-        // This saves the data to the browser's memory
-        localStorage.setItem('bountyBashProfile', JSON.stringify(data));
-        alert("Profile Synced! Your heroes will now be much stronger.");
+        localStorage.setItem('bountyBashProfile', JSON.stringify(profileData));
+        alert("Knowledge & Profile Synced Successfully!");
     }
 
-    // Load data when page opens
+    // Auto-load and auto-calculate on any change
     window.onload = function() {
         const saved = JSON.parse(localStorage.getItem('bountyBashProfile'));
         if (saved) {
-            document.getElementById('kAtk').value = saved.kAtk;
-            document.getElementById('artAtk').value = saved.artAtk;
-            document.getElementById('gemAtk').value = saved.gemAtk;
-            document.getElementById('otherAtk').value = saved.otherAtk;
-            document.getElementById('kHp').value = saved.kHp;
-            document.getElementById('artHp').value = saved.artHp;
-            calculateGlobal();
+            fields.forEach(f => { if(saved[f]) document.getElementById(f).value = saved[f]; });
         }
+        calculate();
+        // Add listeners to all inputs to update totals in real-time
+        fields.forEach(f => {
+            document.getElementById(f).addEventListener('input', calculate);
+        });
     };
 </script>
 
